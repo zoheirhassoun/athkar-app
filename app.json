@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "أذكار",
+    "slug": "athkar-app",
+    "version": "1.0.0",
+    "description": "تطبيق الأذكار - رفيقك اليومي للأذكار والتسبيح مع عداد تفاعلي أنيق. صُمم وطُور بحب ودقة على يد زهير حسون. هذا التطبيق صدقة جارية مُهداة لأرواح أجدادي الكرام وآل حسون وجميع المسلمين والمسلمات: حسين أحمد حسون، سعاد عمر أحمد، عوض عبدالحميد عديل، وبتول أحمد حسون - رحمهم الله جميعاً وجعل هذا العمل في ميزان حسناتهم. 'إذا مات الإنسان انقطع عنه عمله إلا من ثلاثة: إلا من صدقة جارية، أو علم ينتفع به، أو ولد صالح يدعو له'",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1e3a8a"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zoheir.athkarapp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1e3a8a"
+      },
+      "package": "com.zoheir.athkarapp",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-font"
+    ]
+  }
+}
