@@ -240,22 +240,15 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'هذا التطبيق صدقة جارية مُهداة لأرواح أجدادي الكرام وآل حسون وجميع المسلمين والمسلمات:',
+                    'هذا التطبيق صدقة جارية مُهداة لزوجتي وأبنائي وجميع من أحب وآل حسون وآل عديل وجميع المسلمين والمسلمات',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       height: 1.6,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '• حسين أحمد حسون\n• سعاد عمر أحمد\n• عوض عبدالحميد عديل\n• بتول أحمد حسون',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      height: 1.6,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+
                   const SizedBox(height: 12),
                   Text(
-                    'رحمهم الله جميعاً وجعل هذا العمل في ميزان حسناتهم',
+                    'جعله الله في ميزان حسناتهم وحسناتنا جميعاً',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: Colors.green.shade700,
                       fontWeight: FontWeight.w600,

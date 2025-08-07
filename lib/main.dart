@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'providers/theme_provider.dart';
+import 'screens/loading_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/athkar_screen.dart';
 import 'screens/settings_screen.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: const MainScreen(),
+            home: const LoadingScreen(),
           );
         },
       ),

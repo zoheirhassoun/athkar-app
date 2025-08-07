@@ -52,31 +52,28 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(24.0),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    theme.colorScheme.primary,
-                    theme.colorScheme.primary.withOpacity(0.8),
-                    theme.colorScheme.secondary,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.3),
-                    blurRadius: 10,
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 15,
                     offset: const Offset(0, 5),
+                    spreadRadius: 2,
                   ),
                 ],
+                border: Border.all(
+                  color: Colors.grey.withOpacity(0.1),
+                  width: 1,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'أهلاً وسهلاً بك',
+                    'ألا بذكر الله تطمئن القلوب',
                     style: theme.textTheme.headlineMedium?.copyWith(
-                      color: Colors.white,
+                      color: Colors.black87,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -84,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'ابدأ يومك بالأذكار والتسبيح',
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.black54,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -92,21 +89,41 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.favorite,
-                        color: Colors.white,
+                        color: Colors.red,
                         size: isTablet ? 28 : 24,
                       ),
                       const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'صدقة جارية مُهداة لأرواح أجدادي الكرام',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: isTablet ? 16 : 14,
-                          ),
+                      Text(
+                        'صدقة جارية',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.red,
+                          fontSize: isTablet ? 18 : 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'هذا التطبيق صدقة جارية مُهداة لزوجتي وأبنائي وجميع من أحب وآل حسون وآل عديل وجميع المسلمين والمسلمات',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.black87,
+                      fontSize: isTablet ? 16 : 14,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'جعله الله في ميزان حسناتهم وحسناتنا جميعاً',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.green.shade700,
+                      fontSize: isTablet ? 15 : 13,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
                 ],
               ),
             ),

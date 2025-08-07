@@ -1,0 +1,39 @@
+{
+    "name": "تطبيق الأذكار - رفيقك اليومي للأذكار والتسبيح",
+    "short_name": "تطبيق الأذكار",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#2E8B57",
+    "theme_color": "#2E8B57",
+    "description": "تطبيق إسلامي شامل للأذكار اليومية مع عداد تفاعلي وحاسبة استغفار. يعمل على جميع الأجهزة بتصميم متجاوب وأنيق",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "lang": "ar",
+    "dir": "rtl",
+    "scope": "./",
+    "categories": ["lifestyle", "education", "religion"],
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
