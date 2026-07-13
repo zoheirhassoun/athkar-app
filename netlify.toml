@@ -1,0 +1,18 @@
+# إعداد نشر تطبيق الأذكار (Flutter web) على Netlify.
+# Netlify مربوط بمستودع الكود المصدري (athkar-app) ويبني التطبيق بنفسه
+# عند كل دفع إلى الفرع المنشور، ثم ينشر ناتج البناء من مجلد build/web.
+
+[build]
+  command = "bash ./netlify_build.sh"
+  publish = "build/web"
+
+[build.environment]
+  # قناة Flutter المستخدمة أثناء البناء
+  FLUTTER_CHANNEL = "stable"
+
+# توجيه كل المسارات إلى index.html لدعم تطبيق الصفحة الواحدة (SPA)
+# (موجود أيضاً في web/_redirects كطبقة احتياطية)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
