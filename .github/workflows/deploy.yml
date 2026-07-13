@@ -1,0 +1,83 @@
+name: Build & Deploy to Netlify
+
+# يبني نسخة الويب من تطبيق الأذكار (Flutter web) من الكود المصدري هنا،
+# ثم يدفع ناتج البناء إلى مستودع "zoheirhassoun/athkar-zoheir" الذي يراقبه
+# Netlify وينشره تلقائياً.
+#
+# - يعمل تلقائياً عند الدفع إلى main.
+# - يمكن تشغيله يدوياً من أي فرع عبر زر "Run workflow" (workflow_dispatch).
+#
+# المتطلب الوحيد: أضِف السرّ التالي في إعدادات هذا المستودع
+# (Settings → Secrets and variables → Actions → New repository secret):
+#   - DEPLOY_REPO_TOKEN : رمز وصول شخصي (PAT) له صلاحية الكتابة على مستودع
+#     athkar-zoheir. أنشئه من GitHub → Settings → Developer settings →
+#     Personal access tokens. يكفي: Fine-grained token → Repository access:
+#     athkar-zoheir → Permissions: Contents = Read and write.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DEPLOY_REPO: zoheirhassoun/athkar-zoheir
+
+jobs:
+  build-and-deploy:
+    name: Build web and deploy to Netlify repo
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source (athkar-app)
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build web (release)
+        run: flutter build web --release
+
+      - name: Checkout deploy repo (athkar-zoheir)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.DEPLOY_REPO }}
+          token: ${{ secrets.DEPLOY_REPO_TOKEN }}
+          path: deploy-repo
+
+      - name: Sync build output into deploy repo
+        run: |
+          set -e
+          # حذف الملفات القديمة مع الإبقاء على مجلد .git
+          find deploy-repo -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
+          # نسخ ناتج البناء الجديد (بما في ذلك الملفات المخفية مثل _redirects)
+          cp -a build/web/. deploy-repo/
+
+      - name: Commit and push to Netlify repo
+        working-directory: deploy-repo
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "لا تغييرات في ناتج البناء — لا حاجة للنشر."
+            exit 0
+          fi
+          git commit -m "Deploy build from athkar-app@${GITHUB_SHA::7}"
+          git push
