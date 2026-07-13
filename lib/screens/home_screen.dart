@@ -78,78 +78,99 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(24.0),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    theme.colorScheme.primary,
+                    Color.lerp(theme.colorScheme.primary,
+                            theme.colorScheme.secondary, 0.6) ??
+                        theme.colorScheme.primary,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                    spreadRadius: 2,
+                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    blurRadius: 18,
+                    offset: const Offset(0, 8),
                   ),
                 ],
-                border: Border.all(
-                  color: Colors.grey.withOpacity(0.1),
-                  width: 1,
-                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'ألا بذكر الله تطمئن القلوب',
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _greeting(),
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: Colors.black54,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   Row(
                     children: [
-                      Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                        size: isTablet ? 28 : 24,
-                      ),
+                      const Icon(Icons.spa, color: Colors.white, size: 24),
                       const SizedBox(width: 8),
-                      Text(
-                        'صدقة جارية',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.red,
-                          fontSize: isTablet ? 18 : 16,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Text(
+                          'ألا بذكر الله تطمئن القلوب',
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: isTablet ? 26 : 22,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'هذا التطبيق صدقة جارية مُهداة لزوجتي وأبنائي وجميع من أحب وآل حسون وآل عديل وجميع المسلمين والمسلمات',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.black87,
-                      fontSize: isTablet ? 16 : 14,
-                      height: 1.5,
+                    _greeting(),
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: Colors.white.withOpacity(0.9),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'جعله الله في ميزان حسناتهم وحسناتنا جميعاً',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.green.shade700,
-                      fontSize: isTablet ? 15 : 13,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic,
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    textAlign: TextAlign.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.favorite,
+                                color: Colors.white, size: 18),
+                            const SizedBox(width: 8),
+                            Text(
+                              'صدقة جارية',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: Colors.white,
+                                fontSize: isTablet ? 17 : 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'هذا التطبيق صدقة جارية مُهداة لزوجتي وأبنائي وجميع من أحب وآل حسون وآل عديل وجميع المسلمين والمسلمات',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withOpacity(0.95),
+                            fontSize: isTablet ? 15 : 13,
+                            height: 1.6,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'جعله الله في ميزان حسناتهم وحسناتنا جميعاً',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white,
+                            fontSize: isTablet ? 14 : 12,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
-
                 ],
               ),
             ),
@@ -201,9 +222,13 @@ class HomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: theme.colorScheme.surface,
                       borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: color.withOpacity(0.25),
+                        width: 1,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withOpacity(0.08),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -263,9 +288,13 @@ class HomeScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: theme.colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: theme.colorScheme.primary.withOpacity(0.15),
+                  width: 1,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.08),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
