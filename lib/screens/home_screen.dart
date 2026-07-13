@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
+import '../models/athkar_item.dart';
 import '../utils/athkar_data.dart';
 import 'athkar_detail_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  /// تحية حسب وقت اليوم
+  String _greeting() {
+    final hour = DateTime.now().hour;
+    if (hour >= 4 && hour < 12) {
+      return 'صباح الخير، لا تنسَ أذكار الصباح';
+    } else if (hour >= 12 && hour < 17) {
+      return 'طاب نهارك بذكر الله';
+    } else if (hour >= 17 && hour < 21) {
+      return 'مساء الخير، حان وقت أذكار المساء';
+    } else {
+      return 'ليلة مباركة، لا تنسَ أذكار النوم';
+    }
+  }
+
+  /// ذكر مقترح يتغيّر كل يوم
+  AthkarItem get _dhikrOfTheDay {
+    final all = <AthkarItem>[
+      for (final c in AthkarData.categories) ...c.items,
+    ];
+    final dayIndex = DateTime.now().difference(DateTime(2024)).inDays;
+    return all[dayIndex % all.length];
+  }
 
   Color _getColorFromHex(String hex) {
     final buffer = StringBuffer();
@@ -26,6 +50,8 @@ class HomeScreen extends StatelessWidget {
         return Icons.star;
       case 'counter':
         return Icons.calculate;
+      case 'mosque':
+        return Icons.mosque;
       default:
         return Icons.menu_book;
     }
@@ -79,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'ابدأ يومك بالأذكار والتسبيح',
+                    _greeting(),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: Colors.black54,
                     ),
@@ -128,7 +154,11 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            
+
+            // Dhikr of the Day
+            _buildDhikrOfTheDay(context, theme, isTablet),
+            const SizedBox(height: 24),
+
             // Quick Access Section
             Text(
               'الوصول السريع',
@@ -294,6 +324,73 @@ class HomeScreen extends StatelessWidget {
     );
   }
   
+  Widget _buildDhikrOfTheDay(
+    BuildContext context,
+    ThemeData theme,
+    bool isTablet,
+  ) {
+    final item = _dhikrOfTheDay;
+    final accent = theme.colorScheme.secondary;
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(isTablet ? 24 : 20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            accent.withOpacity(0.12),
+            theme.colorScheme.primary.withOpacity(0.10),
+          ],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: accent.withOpacity(0.25), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.auto_awesome, color: accent, size: 22),
+              const SizedBox(width: 8),
+              Text(
+                'ذكر اليوم',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: accent,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            item.text,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontSize: isTablet ? 22 : 18,
+              height: 1.8,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          if (item.reference != null) ...[
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                item.reference!,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   Widget _buildStatItem(
     BuildContext context,
     String value,

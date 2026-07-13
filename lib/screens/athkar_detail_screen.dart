@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../models/athkar_item.dart';
+import '../providers/settings_provider.dart';
 import 'istighfar_counter_screen.dart';
 
 class AthkarDetailScreen extends StatefulWidget {
@@ -23,7 +25,6 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
   
   int _currentIndex = 0;
   List<int> _counters = [];
-  bool _showReward = true;
 
   @override
   void initState() {
@@ -90,7 +91,6 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
     if (_currentIndex < widget.category.items.length - 1) {
       setState(() {
         _currentIndex++;
-        _showReward = true;
       });
       _pageController.animateToPage(
         _currentIndex,
@@ -104,7 +104,6 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
     if (_currentIndex > 0) {
       setState(() {
         _currentIndex--;
-        _showReward = true;
       });
       _pageController.animateToPage(
         _currentIndex,
@@ -124,12 +123,27 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
     setState(() {
       _counters = widget.category.items.map((item) => item.count).toList();
       _currentIndex = 0;
-      _showReward = true;
     });
     _pageController.animateToPage(
       0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
+    );
+  }
+
+  void _copyCurrentText() {
+    final item = widget.category.items[_currentIndex];
+    final buffer = StringBuffer(item.text);
+    if (item.reference != null) {
+      buffer.write('\n\n(${item.reference})');
+    }
+    Clipboard.setData(ClipboardData(text: buffer.toString()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('تم نسخ الذكر'),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -185,12 +199,20 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
     final screenSize = MediaQuery.of(context).size;
     final isTablet = screenSize.width > 768;
     final categoryColor = _getColorFromHex(widget.category.color);
-    
+    final settings = context.watch<SettingsProvider>();
+    final fontScale = settings.fontScale;
+    final showReward = settings.showReward;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.category.title),
         centerTitle: true,
         actions: [
+          IconButton(
+            tooltip: 'نسخ الذكر',
+            icon: const Icon(Icons.copy),
+            onPressed: _copyCurrentText,
+          ),
           PopupMenuButton<String>(
             onSelected: (value) {
               switch (value) {
@@ -201,9 +223,7 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
                   _resetAllCounters();
                   break;
                 case 'toggle_reward':
-                  setState(() {
-                    _showReward = !_showReward;
-                  });
+                  context.read<SettingsProvider>().toggleShowReward();
                   break;
               }
             },
@@ -284,7 +304,6 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
               onPageChanged: (index) {
                 setState(() {
                   _currentIndex = index;
-                  _showReward = true;
                 });
               },
               itemCount: widget.category.items.length,
@@ -380,6 +399,7 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
                               item.text,
                               theme,
                               isTablet,
+                              fontScale,
                             ),
                             if (item.reference != null) ...[
                               const SizedBox(height: 16),
@@ -415,7 +435,7 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
                                 ),
                               ),
                             ],
-                            if (item.reward != null && _showReward) ...[
+                            if (item.reward != null && showReward) ...[
                               const SizedBox(height: 16),
                               Container(
                                 width: double.infinity,
@@ -508,7 +528,15 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
     );
   }
 
-  Widget _buildFormattedText(String text, ThemeData theme, bool isTablet) {
+  Widget _buildFormattedText(
+    String text,
+    ThemeData theme,
+    bool isTablet,
+    double fontScale,
+  ) {
+    final double introSize = (isTablet ? 20 : 16) * fontScale;
+    final double bodySize = (isTablet ? 24 : 20) * fontScale;
+
     // التحقق من وجود الاستعاذة في النص
     if (text.contains('"أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ"')) {
       final parts = text.split('\n\n');
@@ -519,7 +547,7 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
             Text(
               parts[0].replaceAll('"', ''), // إزالة علامات التنصيص
               style: theme.textTheme.titleMedium?.copyWith(
-                fontSize: isTablet ? 20 : 16,
+                fontSize: introSize,
                 height: 1.6,
                 fontWeight: FontWeight.w400,
                 color: Colors.orange.shade700,
@@ -532,7 +560,7 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
             Text(
               parts.sublist(1).join('\n\n'),
               style: theme.textTheme.titleLarge?.copyWith(
-                fontSize: isTablet ? 24 : 20,
+                fontSize: bodySize,
                 height: 1.8,
                 fontWeight: FontWeight.w500,
               ),
@@ -542,7 +570,7 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
         );
       }
     }
-    
+
     // التحقق من وجود البسملة في النص (المعوذات)
     if (text.contains('"بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ"')) {
       final parts = text.split('\n\n');
@@ -553,7 +581,7 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
             Text(
               parts[0].replaceAll('"', ''), // إزالة علامات التنصيص
               style: theme.textTheme.titleMedium?.copyWith(
-                fontSize: isTablet ? 20 : 16,
+                fontSize: introSize,
                 height: 1.6,
                 fontWeight: FontWeight.w600,
                 color: Colors.blue.shade700,
@@ -566,7 +594,7 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
             Text(
               parts.sublist(1).join('\n\n'),
               style: theme.textTheme.titleLarge?.copyWith(
-                fontSize: isTablet ? 24 : 20,
+                fontSize: bodySize,
                 height: 1.8,
                 fontWeight: FontWeight.w500,
               ),
@@ -576,12 +604,12 @@ class _AthkarDetailScreenState extends State<AthkarDetailScreen>
         );
       }
     }
-    
+
     // إذا لم تحتوي على الاستعاذة أو البسملة، عرض النص العادي
     return Text(
       text,
       style: theme.textTheme.titleLarge?.copyWith(
-        fontSize: isTablet ? 24 : 20,
+        fontSize: bodySize,
         height: 1.8,
         fontWeight: FontWeight.w500,
       ),

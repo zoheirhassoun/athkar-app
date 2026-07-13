@@ -204,6 +204,57 @@ class AthkarData {
       ],
     ),
     AthkarCategory(
+      id: 'after_prayer',
+      title: 'أذكار بعد الصلاة',
+      subtitle: 'أذكار عقب الصلوات المفروضة',
+      icon: 'mosque',
+      color: '#0EA5E9',
+      items: [
+        AthkarItem(
+          text: 'أَسْتَغْفِرُ اللَّهَ',
+          count: 3,
+          reward: 'يُستغفر ثلاثاً عقب السلام من الصلاة',
+          reference: 'رواه مسلم',
+        ),
+        AthkarItem(
+          text: 'اللَّهُمَّ أَنْتَ السَّلَامُ، وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ',
+          count: 1,
+          reward: 'يقال عقب الصلاة بعد الاستغفار',
+          reference: 'رواه مسلم',
+        ),
+        AthkarItem(
+          text: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ',
+          count: 1,
+          reward: 'يقال عقب كل صلاة مفروضة',
+          reference: 'رواه البخاري ومسلم',
+        ),
+        AthkarItem(
+          text: 'سُبْحَانَ اللَّهِ',
+          count: 33,
+          reward: 'من سبّح الله دبر كل صلاة ثلاثاً وثلاثين...',
+          reference: 'رواه مسلم',
+        ),
+        AthkarItem(
+          text: 'الْحَمْدُ لِلَّهِ',
+          count: 33,
+          reward: 'وحمد الله ثلاثاً وثلاثين...',
+          reference: 'رواه مسلم',
+        ),
+        AthkarItem(
+          text: 'اللَّهُ أَكْبَرُ',
+          count: 33,
+          reward: 'وكبّر الله ثلاثاً وثلاثين، فتلك تسع وتسعون',
+          reference: 'رواه مسلم',
+        ),
+        AthkarItem(
+          text: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',
+          count: 1,
+          reward: 'تمام المائة، غُفرت خطاياه وإن كانت مثل زبد البحر',
+          reference: 'رواه مسلم',
+        ),
+      ],
+    ),
+    AthkarCategory(
       id: 'istighfar',
       title: 'حاسبة الاستغفار',
       subtitle: 'استغفر الله العظيم',
@@ -250,5 +301,38 @@ class AthkarData {
     } catch (e) {
       return null;
     }
+  }
+
+  /// إجمالي عدد الأذكار في كل الفئات
+  static int get totalItemsCount =>
+      categories.fold<int>(0, (sum, c) => sum + c.items.length);
+
+  /// إزالة التشكيل وعلامات التنصيص لتسهيل البحث
+  static String _normalize(String input) {
+    final withoutDiacritics = input.replaceAll(
+      RegExp('[ً-ْٰـ]'),
+      '',
+    );
+    return withoutDiacritics
+        .replaceAll('"', '')
+        .replaceAll('أ', 'ا')
+        .replaceAll('إ', 'ا')
+        .replaceAll('آ', 'ا')
+        .replaceAll('ة', 'ه')
+        .replaceAll('ى', 'ي')
+        .trim();
+  }
+
+  /// البحث عن الفئات التي تطابق نصاً معيناً (في العنوان أو نصوص الأذكار)
+  static List<AthkarCategory> searchCategories(String query) {
+    final q = _normalize(query);
+    if (q.isEmpty) return categories;
+    return categories.where((c) {
+      if (_normalize(c.title).contains(q) ||
+          _normalize(c.subtitle).contains(q)) {
+        return true;
+      }
+      return c.items.any((item) => _normalize(item.text).contains(q));
+    }).toList();
   }
 }
