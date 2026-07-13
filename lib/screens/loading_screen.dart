@@ -91,23 +91,40 @@ class _LoadingScreenState extends State<LoadingScreen>
 
   @override
   Widget build(BuildContext context) {
-    // اللون الرمادي الغامق مثل خلفية الـ GIF
-    const backgroundColor = Color(0xFF4A4458); // لون رمادي بنفسجي غامق
-    
     return Scaffold(
-      backgroundColor: backgroundColor,
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // الـ GIF
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF12352B), // أخضر داكن أنيق في الأعلى
+              Color(0xFF1C2A33), // مائل للأزرق الرمادي في الأسفل
+            ],
+          ),
+        ),
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 40),
+              // الـ GIF — يُعرض كاملاً (contain) حتى لا يُقتطع الاسم
               Container(
-                width: 350,
-                height: 350,
+                width: 340,
+                height: 340,
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
+                  color: Colors.white.withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.12),
+                    width: 1,
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.4),
@@ -117,12 +134,12 @@ class _LoadingScreenState extends State<LoadingScreen>
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
                     'assets/videos/loading.gif',
-                    width: 350,
-                    height: 350,
-                    fit: BoxFit.cover,
+                    width: 320,
+                    height: 320,
+                    fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
                       // في حالة فشل تحميل الـ GIF
                       return Container(
@@ -310,9 +327,11 @@ class _LoadingScreenState extends State<LoadingScreen>
                 ),
               ),
             ],
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }

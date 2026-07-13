@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/app_constants.dart';
 
 class ThemeProvider extends ChangeNotifier {
   static const String _themeKey = 'darkMode';
@@ -98,76 +99,95 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   ThemeData get darkTheme {
+    const primary = AppConstants.darkPrimary;
+    const surface = AppConstants.darkSurface;
+    const onSurface = AppConstants.darkOnSurface;
+    const muted = AppConstants.darkOnSurfaceMuted;
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF3B82F6),
-        brightness: Brightness.dark,
+      colorScheme: const ColorScheme.dark(
+        primary: primary,
+        onPrimary: Color(0xFF04231A),
+        secondary: AppConstants.amber,
+        onSecondary: Color(0xFF241A00),
+        surface: surface,
+        onSurface: onSurface,
+        surfaceContainerHighest: AppConstants.darkElevated,
+        outline: Color(0xFF3A4A44),
+        error: Color(0xFFFF6B6B),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF374151),
-        foregroundColor: Colors.white,
+        backgroundColor: AppConstants.darkElevated,
+        foregroundColor: onSurface,
         elevation: 0,
         centerTitle: true,
         titleTextStyle: TextStyle(
-          color: Colors.white,
+          color: onSurface,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
-      scaffoldBackgroundColor: const Color(0xFF1A1A1A),
+      scaffoldBackgroundColor: AppConstants.darkBackground,
       cardTheme: CardThemeData(
-        color: const Color(0xFF2D2D2D),
-        elevation: 2,
+        color: surface,
+        elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
       ),
+      dividerColor: const Color(0xFF2A362F),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Color(0xFF2D2D2D),
-        elevation: 8,
+        backgroundColor: AppConstants.darkElevated,
+        selectedItemColor: primary,
+        elevation: 0,
       ),
       textTheme: const TextTheme(
         headlineLarge: TextStyle(
-          color: Colors.white,
+          color: onSurface,
           fontSize: 28,
           fontWeight: FontWeight.bold,
         ),
         headlineMedium: TextStyle(
-          color: Colors.white,
+          color: onSurface,
           fontSize: 24,
           fontWeight: FontWeight.bold,
         ),
+        headlineSmall: TextStyle(
+          color: onSurface,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
         titleLarge: TextStyle(
-          color: Colors.white,
+          color: onSurface,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
         titleMedium: TextStyle(
-          color: Colors.white,
+          color: onSurface,
           fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
         bodyLarge: TextStyle(
-          color: Colors.white,
+          color: onSurface,
           fontSize: 16,
         ),
         bodyMedium: TextStyle(
-          color: Color(0xFFD1D5DB),
+          color: muted,
           fontSize: 14,
         ),
         bodySmall: TextStyle(
-          color: Color(0xFF9CA3AF),
+          color: muted,
           fontSize: 12,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF3B82F6),
-          foregroundColor: Colors.white,
+          backgroundColor: primary,
+          foregroundColor: const Color(0xFF04231A),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
