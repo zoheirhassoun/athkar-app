@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
+import '../providers/settings_provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -134,8 +135,131 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
+            const SizedBox(height: 16),
+
+            // Reading Settings (font size + show reward)
+            Consumer<SettingsProvider>(
+              builder: (context, settings, child) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      // Font size control
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.format_size,
+                              color: theme.colorScheme.primary,
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'حجم الخط',
+                                    style: theme.textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    'التحكم بحجم نص الأذكار',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSurface
+                                          .withOpacity(0.7),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle_outline),
+                              color: theme.colorScheme.primary,
+                              onPressed: settings.fontScale >
+                                      SettingsProvider.minFontScale
+                                  ? settings.decreaseFont
+                                  : null,
+                            ),
+                            Text(
+                              '${(settings.fontScale * 100).round()}%',
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add_circle_outline),
+                              color: theme.colorScheme.primary,
+                              onPressed: settings.fontScale <
+                                      SettingsProvider.maxFontScale
+                                  ? settings.increaseFont
+                                  : null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Live preview of the athkar text
+                      Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withOpacity(0.06),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ',
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontSize: 20 * settings.fontScale,
+                            height: 1.8,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      // Show reward toggle
+                      SwitchListTile(
+                        title: Text(
+                          'إظهار الفضل والثواب',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'عرض فضل كل ذكر أسفل النص',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color:
+                                theme.colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                        ),
+                        value: settings.showReward,
+                        onChanged: (_) => settings.toggleShowReward(),
+                        activeColor: theme.colorScheme.primary,
+                        secondary: Icon(
+                          Icons.auto_awesome,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 24),
-            
+
             // About Section
             Text(
               'حول التطبيق',
