@@ -373,7 +373,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'هذا التطبيق صدقة جارية مُهداة لزوجتي وأبنائي وجميع من أحب وآل حسون وآل عديل وجميع المسلمين والمسلمات',
+                    'هذا التطبيق صدقة جارية مُهداة إلى زوجتي وأبنائي والوالدين وأخواتي',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       height: 1.6,
                     ),

@@ -115,8 +115,8 @@ class _LoadingScreenState extends State<LoadingScreen>
                   const SizedBox(height: 40),
               // الـ GIF — يُعرض كاملاً (contain) حتى لا يُقتطع الاسم
               Container(
-                width: 340,
-                height: 340,
+                width: 280,
+                height: 280,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.06),
@@ -137,8 +137,8 @@ class _LoadingScreenState extends State<LoadingScreen>
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
                     'assets/videos/loading.gif',
-                    width: 320,
-                    height: 320,
+                    width: 250,
+                    height: 250,
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
                       // في حالة فشل تحميل الـ GIF
@@ -211,11 +211,50 @@ class _LoadingScreenState extends State<LoadingScreen>
                 ),
                 textAlign: TextAlign.center,
               ),
-              
 
-              
-              const SizedBox(height: 60),
-              
+              const SizedBox(height: 22),
+
+              // اسم المطور — يظهر بوضوح في المنطقة المرئية
+              FadeTransition(
+                opacity: _nameAnimation,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.25),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Colors.white.withOpacity(0.85),
+                        size: 18,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'المطور: زهير حسون',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 32),
+
               // مؤشر التقدم
               SizedBox(
                 width: 220,
@@ -244,88 +283,7 @@ class _LoadingScreenState extends State<LoadingScreen>
                 ),
               ),
               
-              const SizedBox(height: 80),
-              
-              // بطاقة المطور
-              FadeTransition(
-                opacity: _nameAnimation,
-                child: ScaleTransition(
-                  scale: _nameAnimation,
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
-                        width: 1,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 15,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        // أيقونة المطور
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.person,
-                              color: Colors.white.withOpacity(0.8),
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'المطور',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        // اسم المطور
-                        const Text(
-                          'زهير حسون',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.0,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(0, 2),
-                                blurRadius: 8,
-                                color: Colors.black26,
-                              ),
-                            ],
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        // الوصف
-                        Text(
-                          'صُمم وطُور بحب ودقة',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            height: 1.4,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              const SizedBox(height: 30),
             ],
                   ),
                 ),

@@ -150,7 +150,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'هذا التطبيق صدقة جارية مُهداة لزوجتي وأبنائي وجميع من أحب وآل حسون وآل عديل وجميع المسلمين والمسلمات',
+                          'هذا التطبيق صدقة جارية مُهداة إلى زوجتي وأبنائي والوالدين وأخواتي',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: Colors.white.withOpacity(0.95),
                             fontSize: isTablet ? 15 : 13,
