@@ -1,0 +1,62 @@
+name: Build & Deploy to Netlify
+
+# يبني نسخة الويب من تطبيق الأذكار (Flutter web) وينشرها على Netlify.
+# - يعمل تلقائياً عند الدفع إلى main.
+# - يمكن تشغيله يدوياً من أي فرع عبر زر "Run workflow" (workflow_dispatch).
+#
+# المتطلبات: أضِف السرّين التاليين في إعدادات المستودع
+# (Settings → Secrets and variables → Actions):
+#   - NETLIFY_AUTH_TOKEN : من Netlify → User settings → Applications → Personal access tokens
+#   - NETLIFY_SITE_ID    : من Netlify → Site settings → Site information → Site ID (API ID)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+  pull-requests: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Build web and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build web (release)
+        run: flutter build web --release
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: build/web
+          production-deploy: true
+          deploy-message: "Deploy ${{ github.sha }} via GitHub Actions"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 5
